@@ -1,14 +1,13 @@
 //This is the title for your window tab, and your Radar
-document.title = "Stephen's Technology Radar";
+document.title = "Pete's Technology Radar";
 
 
 //This is the concentic circles that want on your radar
 var radar_arcs = [
-                   {'r':100,'name':'Adopt'}
-                  ,{'r':200,'name':'Trial'}
-                  ,{'r':300,'name':'Assess'}
-                  ,{'r':400,'name':'Hold'}
-                 // ,{'r':500,'name':'Possible Extra if you want it'}
+                   {'r':100,'name':'Adopt'},
+                   {'r':200,'name':'Trial'},
+                   {'r':300,'name':'Assess'},
+                   {'r':400,'name':'Hold'}
                  ];
 
 //This is your raw data
@@ -34,9 +33,13 @@ var radar_arcs = [
 //
 // Coarse-grained quadrants
 // - Techniques: elements of a software development process, such as experience design; and ways of structuring software, such micro-services.
+                 // 90 - 180
 // - Tools: components, such as databases, software development tools, such as versions control systems; or more generic categories of tools, such as the notion of polyglot persistance.
+                 // 0 - 90
 // - Platforms: things that we build software on top of: mobile technologies like Android, virtual platforms like the JVM, or generic kinds of platforms like hybrid clouds
+                 // 180 - 270
 // - Programming Languages and Frameworks
+                 // 270 - 360
 //
 // Rings:
 // - Adopt: blips you should be using now; proven and mature for use
@@ -53,49 +56,52 @@ var radar_data = [
         "left" : 45,
         "top" : 18,
         "color" : "#8FA227",
-        "items" : [ 
-            {"name":"Database based Integration", "pc":{"r":350,"t":135},"movement":"t", "blipSize":700},
-            {"name":"Scrum certification", "pc":{"r":350,"t":95},"movement":"c", "url":"http://www.google.com"},
-            {"name":"Incremental data warehousing", "pc":{"r":250,"t":165},"movement":"c"},    
-            {"name":"DevOps", "pc":{"r":250,"t":110},"movement":"c"},    
-            {"name":"Polygot Programming", "pc":{"r":180,"t":170},"movement":"c"},    
-            {"name":"Automation of technical tests", "pc":{"r":180,"t":155},"movement":"c"},    
-            {"name":"Capability modelling", "pc":{"r":180,"t":125},"movement":"c"},   
-            {"name":"Service choreography", "pc":{"r":180,"t":105},"movement":"c"},   
-            {"name":"Continuous deployment", "pc":{"r":180,"t":100},"movement":"c"},   
-            {"name":"Evolutionary architecture", "pc":{"r":120,"t":95},"movement":"c"},   
-            {"name":"Coding architects", "pc":{"r":90,"t":170},"movement":"c"},   
-            {"name":"Visualisation and metrics", "pc":{"r":80,"t":150},"movement":"c"},   
-            {"name":"Web as platform", "pc":{"r":80,"t":110},"movement":"c"},   
-            {"name":"Emergent design", "pc":{"r":80,"t":100},"movement":"c"},   
-            {"name":"Evolutionary database", "pc":{"r":70,"t":170},"movement":"c"},   
-            {"name":"Platform roadmaps", "pc":{"r":30,"t":100},"movement":"c"},   
-            {"name":"Build pipelines", "pc":{"r":30,"t":160},"movement":"c"} 
+        "items" : [
+            { "name": "DevOps",                                            "pc": { "r": 117, "t": 94},  "movement": "c"},
+            { "name": "Real world testing of mobile networks",             "pc": { "r": 341, "t": 110}, "movement": "c"},
+            { "name": "Build pipelines",                                   "pc": { "r": 341, "t": 116}, "movement": "c"},
+            { "name": "Development Environments in the cloud",             "pc": { "r": 295, "t": 128}, "movement": "c"},
+            { "name": "Analytics and data science",                        "pc": { "r": 275, "t": 128}, "movement": "t"},
+            { "name": "Mobile first",                                      "pc": { "r": 167, "t": 129}, "movement": "c"},
+            { "name": "Web as platform",                                   "pc": { "r": 109, "t": 140}, "movement": "c"},
+            { "name": "Continuous delivery for mobile devices",            "pc": { "r": 138, "t": 141}, "movement": "c"},
+            { "name": "Standardize machine and application configuration", "pc": { "r": 385, "t": 150}, "movement": "c"},
+            { "name": "Perimeterless enterprise",                          "pc": { "r": 327, "t": 156}, "movement": "c"},
+            { "name": "Optimize test order",                               "pc": { "r": 244, "t": 156}, "movement": "c"},
+            { "name": "Blue-green deployment",                             "pc": { "r": 214, "t": 160}, "movement": "c"},
+            { "name": "Capture client side javascript errors",             "pc": { "r": 133, "t": 160}, "movement": "c"},
+            { "name": "Logs as data, better logging",                      "pc": { "r": 275, "t": 174}, "movement": "c"},
+            { "name": "Infrastructure automation",                         "pc": { "r": 84,  "t": 175}, "movement": "c"}
         ]
     },
     { "quadrant": "Tools",
         "left": w-200+30,
         "top" : 18,
         "color" : "#587486",
-        "items" : [ 
-            {"name":"ESB", "pc":{"r":390,"t":20},"movement":"t"},   
-            {"name":"Intentional Programming", "pc":{"r":310,"t":10},"movement":"c"},   
-            {"name":"Cross mobile platforms", "pc":{"r":280,"t":85},"movement":"c"},   
-            {"name":"Github", "pc":{"r":280,"t":70},"movement":"c"},   
-            {"name":"Restfulie", "pc":{"r":280,"t":50},"movement":"c"},   
-            {"name":"RDF triple stores", "pc":{"r":280,"t":30},"movement":"c"},   
-            {"name":"Apache camel", "pc":{"r":180,"t":85},"movement":"c"},   
-            {"name":"Next gen test tools", "pc":{"r":180,"t":75},"movement":"c"},   
-            {"name":"NoSQL", "pc":{"r":180,"t":65},"movement":"c"},   
-            {"name":"Neo4j", "pc":{"r":180,"t":50},"movement":"c"},   
-            {"name":"Message busses without smarts", "pc":{"r":160,"t":85},"movement":"c"},   
-            {"name":"Puppet", "pc":{"r":130,"t":85},"movement":"c"},   
-            {"name":"mongoDB", "pc":{"r":130,"t":55},"movement":"c"},   
-            {"name":"Mercurial", "pc":{"r":130,"t":30},"movement":"c"},   
-            {"name":"Git", "pc":{"r":130,"t":15},"movement":"c"},   
-            {"name":"Squid", "pc":{"r":80,"t":85},"movement":"c"},   
-            {"name":"ASP.NET MVC", "pc":{"r":80,"t":10},"movement":"c"},   
-            {"name":"Subversion", "pc":{"r":30,"t":30},"movement":"c"}
+        "items" : [
+            { "name": "Gradle",                              "pc": { "r": 75,  "t": 4},  "movement": "c"},
+            { "name": "Puppet",                              "pc": { "r": 265, "t": 5},  "movement": "c"},
+            { "name": "Jekyll",                              "pc": { "r": 216, "t": 12}, "movement": "c"},
+            { "name": "Github",                              "pc": { "r": 156, "t": 15}, "movement": "c"},
+            { "name": "Next gen test tools",                 "pc": { "r": 84,  "t": 18}, "movement": "c"},
+            { "name": "Puppet, Chef, and Octopus",           "pc": { "r": 323, "t": 23}, "movement": "c"},
+            { "name": "Frank",                               "pc": { "r": 31,  "t": 26}, "movement": "c"},
+            { "name": "Cross mobile platforms",              "pc": { "r": 365, "t": 27}, "movement": "c"},
+            { "name": "Embeded servlet containers",          "pc": { "r": 152, "t": 33}, "movement": "c"},
+            { "name": "Graphite",                            "pc": { "r": 109, "t": 34}, "movement": "c"},
+            { "name": "Intentional Programming",             "pc": { "r": 93,  "t": 38}, "movement": "c"},
+            { "name": "NoSQL",                               "pc": { "r": 203, "t": 45}, "movement": "c"},
+            { "name": "Logstash and Graylog2",               "pc": { "r": 287, "t": 49}, "movement": "c"},
+            { "name": "Apache Pig",                          "pc": { "r": 276, "t": 50}, "movement": "c"},
+            { "name": "Locust",                              "pc": { "r": 172, "t": 56}, "movement": "c"},
+            { "name": "NuGet and Chocolatey NuGet",          "pc": { "r": 140, "t": 64}, "movement": "c"},
+            { "name": "Git",                                 "pc": { "r": 324, "t": 74}, "movement": "c"},
+            { "name": "Message busses without smarts",       "pc": { "r": 145, "t": 75}, "movement": "c"},
+            { "name": "D3",                                  "pc": { "r": 128, "t": 75}, "movement": "c"},
+            { "name": "Puppet-librarian and Chef-librarian", "pc": { "r": 98,  "t": 78}, "movement": "c"},
+            { "name": "TestFlight",                          "pc": { "r": 133, "t": 79}, "movement": "c"},
+            { "name": "Gatling",                             "pc": { "r": 288, "t": 79}, "movement": "c"},
+            { "name": "WebFonts and SVG",                    "pc": { "r": 228, "t": 84}, "movement": "c"}
         ]
     },
     { "quadrant": "Platforms",
@@ -103,48 +109,46 @@ var radar_data = [
          "top" : (h/2 + 18),
         "color" : "#DC6F1D",
         "items" : [
-            {"name":"Rich internet applications", "pc":{"r":390,"t":265},"movement":"c"},   
-            {"name":"GWT", "pc":{"r":390,"t":250},"movement":"c"},   
-            {"name":"IE8", "pc":{"r":390,"t":230},"movement":"c"},   
-            {"name":"WS-* beyond basic profile", "pc":{"r":390,"t":190},"movement":"c"},   
-            {"name":"Azure", "pc":{"r":290,"t":265},"movement":"c"},   
-            {"name":"Mobile Web", "pc":{"r":275,"t":260},"movement":"t"},   
-            {"name":"Google App Engine", "pc":{"r":290,"t":255},"movement":"c"},   
-            {"name":"Application appliances", "pc":{"r":190,"t":245},"movement":"c"},   
-            {"name":"Google as corporate platform", "pc":{"r":290,"t":200},"movement":"c"},   
-            {"name":"GPGPU", "pc":{"r":190,"t":185},"movement":"t"},   
-            {"name":"App containers", "pc":{"r":250,"t":260},"movement":"c"},   
-            {"name":"OAuth", "pc":{"r":130,"t":260},"movement":"t"},   
-            {"name":"RDFa", "pc":{"r":130,"t":250},"movement":"t"},   
-            {"name":"Location based services", "pc":{"r":130,"t":230},"movement":"c"},   
-            {"name":"iPad", "pc":{"r":130,"t":220},"movement":"c"},   
-            {"name":"EC2 & S3", "pc":{"r":190,"t":250},"movement":"c"},   
-            {"name":"Facebook as a business platform", "pc":{"r":190,"t":190},"movement":"c"},   
-            {"name":"JVM as platform", "pc":{"r":90,"t":265},"movement":"c"},   
-            {"name":"iPhone", "pc":{"r":90,"t":215},"movement":"c"},   
-            {"name":"Android", "pc":{"r":90,"t":190},"movement":"c"},   
-            {"name":"KVM", "pc":{"r":70,"t":260},"movement":"t"},   
-            {"name":"Atom", "pc":{"r":70,"t":245},"movement":"t"},   
-            {"name":"ALT.NET", "pc":{"r":90,"t":190},"movement":"c"},   
-            {"name":"IE6 End of Life", "pc":{"r":30,"t":225},"movement":"c"}
+            { "name": "EC2 & S3",                                     "pc": { "r": 103, "t": 181}, "movement": "c"},
+            { "name": "Google as corporate platform",                 "pc": { "r": 51,  "t": 194}, "movement": "c"},
+            { "name": "Location based services",                      "pc": { "r": 125, "t": 197}, "movement": "c"},
+            { "name": "Node.js",                                      "pc": { "r": 315, "t": 198}, "movement": "c"},
+            { "name": "iPhone",                                       "pc": { "r": 259, "t": 205}, "movement": "c"},
+            { "name": "Mobile Web",                                   "pc": { "r": 127, "t": 207}, "movement": "t"},
+            { "name": "NoSQL using PostgreSQL, MongoDB",              "pc": { "r": 280, "t": 210}, "movement": "c"},
+            { "name": "iPad",                                         "pc": { "r": 181, "t": 211}, "movement": "c"},
+            { "name": "JVM as platform",                              "pc": { "r": 23,  "t": 211}, "movement": "c"},
+            { "name": "Windows 8.1 Metro mode",                       "pc": { "r": 388, "t": 212}, "movement": "c"},
+            { "name": "Android",                                      "pc": { "r": 257, "t": 215}, "movement": "c"},
+            { "name": "SMS and USSD, feature phones",                 "pc": { "r": 107, "t": 230}, "movement": "c"},
+            { "name": "Vumi",                                         "pc": { "r": 234, "t": 234}, "movement": "c"},
+            { "name": "Wearable tech",                                "pc": { "r": 202, "t": 244}, "movement": "c"},
+            { "name": "Chromecast",                                   "pc": { "r": 252, "t": 247}, "movement": "c"},
+            { "name": "PhantomJS",                                    "pc": { "r": 10,  "t": 248}, "movement": "c"},
+            { "name": "Rich internet applications",                   "pc": { "r": 198, "t": 250}, "movement": "c"},
+            { "name": "Living room technology, Xbox, PS4, Smart tvs", "pc": { "r": 210, "t": 254}, "movement": "c"},
+            { "name": "OAuth",                                        "pc": { "r": 284, "t": 268}, "movement": "t"}
         ]
     },
     { "quadrant": "Languages",
         "color" : "#B70062",
         "left"  : (w-200+30),
         "top" :   (h/2 + 18),
-        "items" : [ 
-            {"name":"Java language end of life", "pc":{"r":290,"t":355},"movement":"c"},   
-            {"name":"F#", "pc":{"r":270,"t":330},"movement":"c"},   
-            {"name":"Scala", "pc":{"r":290,"t":320},"movement":"c"},   
-            {"name":"Clojure", "pc":{"r":260,"t":310},"movement":"c"},   
-            {"name":"HTML 5", "pc":{"r":250,"t":275},"movement":"c"},   
-            {"name":"DSLs", "pc":{"r":190,"t":340},"movement":"c"},   
-            {"name":"Groovy", "pc":{"r":190,"t":280},"movement":"c"},   
-            {"name":"C#4", "pc":{"r":90,"t":355},"movement":"c"},   
-            {"name":"JRuby", "pc":{"r":90,"t":330},"movement":"c"},   
-            {"name":"Javascript as a 1st class language", "pc":{"r":90,"t":275},"movement":"c"},   
-            {"name":"Ruby", "pc":{"r":30,"t":282},"movement":"c"}
+        "items" : [
+            { "name": "Ruby",                               "pc": { "r": 67,  "t": 272}, "movement": "c"},
+            { "name": "Groovy",                             "pc": { "r": 317, "t": 273}, "movement": "c"},
+            { "name": "CSS Frameworks",                     "pc": { "r": 383, "t": 278}, "movement": "c"},
+            { "name": "Jasmine and Node.JS",                "pc": { "r": 209, "t": 294}, "movement": "c"},
+            { "name": "CoffeeScript",                       "pc": { "r": 227, "t": 295}, "movement": "c"},
+            { "name": "Scala",                              "pc": { "r": 74,  "t": 296}, "movement": "c"},
+            { "name": "Sinatra",                            "pc": { "r": 367, "t": 308}, "movement": "c"},
+            { "name": "Javascript as a 1st class language", "pc": { "r": 244, "t": 309}, "movement": "c"},
+            { "name": "DSLs",                               "pc": { "r": 252, "t": 315}, "movement": "c"},
+            { "name": "Clojure",                            "pc": { "r": 191, "t": 316}, "movement": "c"},
+            { "name": "Backbone.js",                        "pc": { "r": 57,  "t": 320}, "movement": "c"},
+            { "name": "HTML 5",                             "pc": { "r": 99,  "t": 326}, "movement": "c"},
+            { "name": "Twitter Bootstrap",                  "pc": { "r": 184, "t": 339}, "movement": "c"},
+            { "name": "Require.js",                         "pc": { "r": 258, "t": 345}, "movement": "c"}
         ]
     }
 ];
