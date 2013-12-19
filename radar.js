@@ -4,7 +4,7 @@ function init(h,w) {
   var radar = new pv.Panel()
   .width(w)
   .height(h)
-  .canvas('radar')
+  .canvas('radar');
 
   // arcs
   radar.add(pv.Dot)
@@ -63,6 +63,10 @@ function init(h,w) {
 };
 function placePoints() {
   var svg = d3.select("svg");
+  var drag = d3.behavior.drag().
+    on("drag", dragmove).
+    on("dragend", dropHandler);
+
   var total_index=1;
   for (var i = 0; i < radar_data.length; i++) {
    var className = radar_data[i].quadrant.toLowerCase();
@@ -74,27 +78,45 @@ function placePoints() {
       data(radar_data[i].items).
       enter().
       append("g").
-      append("a").
-      attr("title", function(d){return d.name;});
+      call(drag);
 
     node.each(function(d, i) {
       d.id = total_index++;
       d.raster = polar_to_raster(d.pc.r, d.pc.t);
+      d.x = d.raster[0];
+      d.y = d.raster[1];
+      d.blipSize = (d.blipSize !== undefined ? d.blipSize : 10);
     });
 
-    //shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
-    node.append("circle").attr("r", function (d) {return d.blipSize !== undefined ? d.blipSize : 10;}).
-      attr("class", className).
-      attr("cx", function(d) { return d.raster[0]; }).
-      attr("cy", function(d) { return d.raster[1]; });
+    node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"}).
+      append("a").
+      attr("title", function(d){return d.name;});
 
+    //shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
+    node.append("circle").attr("r", function (d) {return d.blipSize;}).
+      attr("class", className);
+    /*
+      attr("cx", function(d) { return d.x; }).
+      attr("cy", function(d) { return d.y; });
+*/
     node.attr("xlink:href", function(d){return "#"+d.id;}).
       attr("class", function(d){return "node cir_"+d.id;}).
       append("text").
       attr("dy", ".35em").
       attr("text-anchor","middle").
       text(function(d) { return d.id; }).
-      attr("textStyle", "white").
-      attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
+      attr("textStyle", "white");
+      //attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
   }
+}
+function dropHandler(d) {
+  console.log("data: " + d.x + " " + d.y);
+  var cart = raster_to_cartesian(d.x, d.y);
+  console.log("cartesian: " + cart[0] + " " + cart[1]);
+}
+
+function dragmove(d) {
+  d.x = d3.event.x;
+  d.y = d3.event.y;
+  d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
 }

@@ -14,7 +14,7 @@ function cartesian_to_raster(x,y) {
 
 function raster_to_cartesian(rx,ry) {
   var x = rx - w/2;
-  var y = ry - h/2;
+  var y = h/2 - ry;
   return [x,y];
 }
 
