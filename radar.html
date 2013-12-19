@@ -3,12 +3,29 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">  
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="lib/protovis-3.2/protovis-d3.2.js"></script>
 <script type="text/javascript" charset="utf-8" src="utils.js"></script>
 <script type="text/javascript" charset="utf-8" src="radars/radarData.js"></script>
 
 <style type="text/css" media="screen">
-  
+circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 10px sans-serif;
+  fill: black;
+}
+
 #fig {
   height: 1000px;
   width: 1200px;
@@ -17,7 +34,26 @@
 </style>
 <script type="text/javascript" src="radar.js" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
+function placePoints() {
+var svg = d3.select("svg");
+var node = svg.selectAll(".node").
+  data(d3_data).
+  enter().
+  append("g").
+  append("a").attr("title", function(d){return d.name;});
 
+  node.each(function(d) {d.raster = polar_to_raster(d.pc.r, d.pc.t);});
+
+  node.append("text").
+  attr("dy", ".35em").
+  attr("text-anchor","middle").
+  text(function(d) { return d.name; }).
+  attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
+
+  node.append("circle").attr("r", 30).
+  attr("cx", function(d) { return d.raster[0]; }).
+  attr("cy", function(d) { return d.raster[1]; });
+}
 </script>
 
 </head>

@@ -87,5 +87,5 @@ for (var i = 0; i < radar_data.length; i++) {
        
  radar.anchor('radar');
  radar.render();
-     
+ placePoints();
   };
