@@ -8,7 +8,7 @@ function polar_to_cartesian(r,t) {
 
 function cartesian_to_raster(x,y) {
   var rx = w/2 + x;
-  var ry = h/2 + y;
+  var ry = h/2 - y;
   return [rx,ry];
 }
 

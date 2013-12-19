@@ -9,9 +9,15 @@
 <script type="text/javascript" charset="utf-8" src="radars/radarData.js"></script>
 
 <style type="text/css" media="screen">
+g {
+  fill-opacity: .25;
+}
+.node {
+  fill-opacity: 1;
+}
+
 circle {
   fill: rgb(31, 119, 180);
-  fill-opacity: .25;
   stroke: rgb(31, 119, 180);
   stroke-width: 1px;
 }
@@ -24,6 +30,7 @@ circle {
 text {
   font: 10px sans-serif;
   fill: black;
+  fill-opacity: 1;
 }
 
 #fig {
@@ -31,29 +38,27 @@ text {
   width: 1200px;
 }
 
+.techniques circle {
+  fill: rgb(143,162,39);
+  stroke: rgb(143,162,39);
+}
+.tools circle {
+  fill: rgb(88,116,134);
+  stroke: rgb(88,116,134);
+}
+.platforms circle {
+  fill: rgb(220,111,29);
+  stroke: rgb(220,111,29);
+}
+.languages circle {
+  fill: rgb(183,0,98);
+  stroke: rgb(183,0,98);
+}
+
 </style>
 <script type="text/javascript" src="radar.js" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-function placePoints() {
-var svg = d3.select("svg");
-var node = svg.selectAll(".node").
-  data(d3_data).
-  enter().
-  append("g").
-  append("a").attr("title", function(d){return d.name;});
 
-  node.each(function(d) {d.raster = polar_to_raster(d.pc.r, d.pc.t);});
-
-  node.append("text").
-  attr("dy", ".35em").
-  attr("text-anchor","middle").
-  text(function(d) { return d.name; }).
-  attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
-
-  node.append("circle").attr("r", 30).
-  attr("cx", function(d) { return d.raster[0]; }).
-  attr("cy", function(d) { return d.raster[1]; });
-}
 </script>
 
 </head>

@@ -1,91 +1,100 @@
 function init(h,w) {
   $('#title').text(document.title);  
-	   
- var radar = new pv.Panel()
-      .width(w)
-      .height(h)
-      .canvas('radar')
 
-// arcs
-radar.add(pv.Dot)
-       .data(radar_arcs)
-       .left(w/2)
-       .bottom(h/2)
-       .radius(function(d){return d.r;})
-       .strokeStyle("#ccc")
-       .anchor("top")       
-       .add(pv.Label).text(function(d) { return d.name;});
+  var radar = new pv.Panel()
+  .width(w)
+  .height(h)
+  .canvas('radar')
 
-//quadrant lines -- vertical
-radar.add(pv.Line)
-        .data([(h/2-radar_arcs[radar_arcs.length-1].r),h-(h/2-radar_arcs[radar_arcs.length-1].r)])
-        .lineWidth(1)
-        .left(w/2)        
-        .bottom(function(d) {return d;})       
-        .strokeStyle("#bbb");
+  // arcs
+  radar.add(pv.Dot)
+  .data(radar_arcs)
+  .left(w/2)
+  .top(h/2)
+  .radius(function(d){return d.r;})
+  .strokeStyle("#ccc")
+  .anchor("top")       
+  .add(pv.Label).text(function(d) { return d.name;});
 
-//quadrant lines -- horizontal 
-radar.add(pv.Line)
-        .data([(w/2-radar_arcs[radar_arcs.length-1].r),w-(w/2-radar_arcs[radar_arcs.length-1].r)])
-        .lineWidth(1)
-        .bottom(h/2)
-        .left(function(d) {return d;})       
-        .strokeStyle("#bbb");
+  //quadrant lines -- vertical
+  radar.add(pv.Line)
+  .data([(h/2-radar_arcs[radar_arcs.length-1].r),h-(h/2-radar_arcs[radar_arcs.length-1].r)])
+  .lineWidth(1)
+  .left(w/2)        
+  .top(function(d) {return d;})       
+  .strokeStyle("#bbb");
+
+  //quadrant lines -- horizontal 
+  radar.add(pv.Line)
+  .data([(w/2-radar_arcs[radar_arcs.length-1].r),w-(w/2-radar_arcs[radar_arcs.length-1].r)])
+  .lineWidth(1)
+  .top(h/2)
+  .left(function(d) {return d;})       
+  .strokeStyle("#bbb");
 
 
-// blips
-var total_index=1;
-for (var i = 0; i < radar_data.length; i++) {
-    radar.add(pv.Dot)       
-    .def("active", false)
-    .data(radar_data[i].items)
-    .size( function(d) { return ( d.blipSize !== undefined ? d.blipSize : 70 ); })
-    .left(function(d) { var x = polar_to_raster(d.pc.r, d.pc.t)[0];
-                        console.log("name:" + d.name + ", x:" + x); 
-                        return x;})
-    .bottom(function(d) { var y = polar_to_raster(d.pc.r, d.pc.t)[1];                                 
-                          console.log("name:" + d.name + ", y:" + y); 
-                          return y;})
-    .title(function(d) { return d.name;})		 
+  //Quadrant Ledgends
+  var radar_quadrant_ctr=1;
+  for (var i = 0; i < radar_data.length; i++) {        
+    radar.add(pv.Label)         
+    .left( radar_data[i].left )         
+    .top( radar_data[i].top )  
+    .text(  radar_data[i].quadrant )		 
+    .strokeStyle( radar_data[i].color )
+    .fillStyle( radar_data[i].color )                    
+    .font("18px sans-serif")
+    .add( pv.Dot )            
+    .def("i", radar_data[i].top )
+    .data(radar_data[i].items)            
+    .top( function() { return ( this.i() + 18 + this.index * 18 );} )   
+    .shape( function(d) {return (d.movement === 't' ? "triangle" : "circle");})                 
     .cursor( function(d) { return ( d.url !== undefined ? "pointer" : "auto" ); })                                                            
     .event("click", function(d) { if ( d.url !== undefined ){self.location =  d.url}}) 
-    .angle(45)
-    .strokeStyle(radar_data[i].color)
-    .fillStyle(radar_data[i].color)
-    .shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})         
-    .anchor("center")
-        .add(pv.Label)
-        .text(function(d) {return total_index++;}) 
-        .textBaseline("middle")
-        .textStyle("white");            
+    .size(10) 
+    .angle(45)            
+    .anchor("right")                
+    .add(pv.Label)                
+    .text(function(d) {return radar_quadrant_ctr++ + ". " + d.name;} );
+  }      
+
+  radar.anchor('radar');
+  radar.render();
+  placePoints();
+};
+function placePoints() {
+  var svg = d3.select("svg");
+  var total_index=1;
+  for (var i = 0; i < radar_data.length; i++) {
+   var className = radar_data[i].quadrant.toLowerCase();
+   var group = svg.append("g").
+      attr("title", function(){ return radar_data[i].quadrant;}).
+      attr("class", className);
+
+    var node = group.selectAll(".node").
+      data(radar_data[i].items).
+      enter().
+      append("g").
+      append("a").
+      attr("title", function(d){return d.name;});
+
+    node.each(function(d, i) {
+      d.id = total_index++;
+      d.raster = polar_to_raster(d.pc.r, d.pc.t);
+    });
+
+    //shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
+    node.append("circle").attr("r", function (d) {return d.blipSize !== undefined ? d.blipSize : 10;}).
+      attr("class", className).
+      attr("cx", function(d) { return d.raster[0]; }).
+      attr("cy", function(d) { return d.raster[1]; });
+
+    node.attr("xlink:href", function(d){return "#"+d.id;}).
+      attr("class", function(d){return "node cir_"+d.id;}).
+      append("text").
+      attr("dy", ".35em").
+      attr("text-anchor","middle").
+      text(function(d) { return d.id; }).
+      attr("textStyle", "white").
+      attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
+  }
 }
-
-
-//Quadrant Ledgends
-var radar_quadrant_ctr=1;
-for (var i = 0; i < radar_data.length; i++) {        
-    radar.add(pv.Label)         
-         .left( radar_data[i].left )         
-         .top( radar_data[i].top )  
-         .text(  radar_data[i].quadrant )		 
-         .strokeStyle( radar_data[i].color )
-         .fillStyle( radar_data[i].color )                    
-         .font("18px sans-serif")
-            .add( pv.Dot )            
-            .def("i", radar_data[i].top )
-            .data(radar_data[i].items)            
-            .top( function() { return ( this.i() + 18 + this.index * 18 );} )   
-            .shape( function(d) {return (d.movement === 't' ? "triangle" : "circle");})                 
-            .cursor( function(d) { return ( d.url !== undefined ? "pointer" : "auto" ); })                                                            
-            .event("click", function(d) { if ( d.url !== undefined ){self.location =  d.url}}) 
-            .size(10) 
-            .angle(45)            
-            .anchor("right")                
-                .add(pv.Label)                
-                .text(function(d) {return radar_quadrant_ctr++ + ". " + d.name;} );
-}      
-       
- radar.anchor('radar');
- radar.render();
- placePoints();
-  };
