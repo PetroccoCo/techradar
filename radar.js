@@ -2,8 +2,8 @@ function init(h,w) {
   $('#title').text(document.title);  
 
   var radar = new pv.Panel()
-  .width(w)
-  .height(h)
+  .width($("#radar").width())
+  .height(Math.max($(window).height(), $("#radar").width()))
   .canvas('radar');
 
   // arcs
@@ -32,8 +32,13 @@ function init(h,w) {
   .left(function(d) {return d;})       
   .strokeStyle("#bbb");
 
+  radar.anchor('radar');
+  radar.render();
+  placePoints();
+  addLedgend();
+}
 
-  //Quadrant Ledgends
+function addLedgend() {
   var radar_quadrant_ctr=1;
   for (var i = 0; i < radar_data.length; i++) {        
     radar.add(pv.Label)         
@@ -57,12 +62,9 @@ function init(h,w) {
     .text(function(d) {return radar_quadrant_ctr++ + ". " + d.name;} );
   }      
 
-  radar.anchor('radar');
-  radar.render();
-  placePoints();
-};
+}
 function placePoints() {
-  var svg = d3.select("svg");
+  var svg = d3.select("svg").attr("viewBox", "0 0 "+1000+" "+1000);
   var drag = d3.behavior.drag().
     on("drag", dragmove).
     on("dragend", dropHandler);
