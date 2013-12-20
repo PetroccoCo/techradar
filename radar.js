@@ -69,7 +69,9 @@ function placePoints() {
 
   var total_index=1;
   for (var i = 0; i < radar_data.length; i++) {
+   radar_data[i].items.sort(radar_data_sorter);
    var className = radar_data[i].quadrant.toLowerCase();
+   d3.select("g." + className).remove()
    var group = svg.append("g").
       attr("title", function(){ return radar_data[i].quadrant;}).
       attr("class", className);
@@ -92,31 +94,34 @@ function placePoints() {
       append("a").
       attr("title", function(d){return d.name;});
 
-    //shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
+    //TODO shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
     node.append("circle").attr("r", function (d) {return d.blipSize;}).
       attr("class", className);
-    /*
-      attr("cx", function(d) { return d.x; }).
-      attr("cy", function(d) { return d.y; });
-*/
+
     node.attr("xlink:href", function(d){return "#"+d.id;}).
       attr("class", function(d){return "node cir_"+d.id;}).
       append("text").
       attr("dy", ".35em").
       attr("text-anchor","middle").
-      text(function(d) { return d.id; }).
-      attr("textStyle", "white");
-      //attr("transform", function(d) { return "translate(" + d.raster[0] + ", " + d.raster[1] + ")";});
+      text(function(d) { return d.id; });
   }
 }
+function radar_data_sorter(a, b){
+  var radComp = a.pc.r - b.pc.r;
+  if (radComp === 0){
+    return a.pc.t - b.pc.t
+  }
+  return radComp;
+}
 function dropHandler(d) {
-  console.log("data: " + d.x + " " + d.y);
-  var cart = raster_to_cartesian(d.x, d.y);
-  console.log("cartesian: " + cart[0] + " " + cart[1]);
+  var polar = raster_to_polar(d.x, d.y);
+  d.pc.r = polar[0];
+  d.pc.t = polar[1];
+  placePoints();
 }
 
 function dragmove(d) {
-  d.x = d3.event.x;
-  d.y = d3.event.y;
+  d.x = Math.round(d3.event.x);
+  d.y = Math.round(d3.event.y);
   d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
 }

@@ -18,8 +18,18 @@ function raster_to_cartesian(rx,ry) {
   return [x,y];
 }
 
+function cartesian_to_polar(x,y) {
+  var r = Math.round(Math.sqrt(x*x + y*y));
+  var t = Math.round(Math.atan2(y, x) * 180/Math.PI);
+  return [r,t];
+}
+
 function polar_to_raster(r,t) {
   var xy= polar_to_cartesian(r,t);
   return cartesian_to_raster(xy[0], xy[1]);
 }
 
+function raster_to_polar(rx, ry) {
+  var xy = raster_to_cartesian(rx, ry);
+  return cartesian_to_polar(xy[0], xy[1]);
+}
