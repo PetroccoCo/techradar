@@ -2,15 +2,16 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script src="bootstrap/js/bootstrap.min.js"></script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="lib/protovis-3.2/protovis-d3.2.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="utils.js"></script>
 <script type="text/javascript" charset="utf-8" src="radars/radarData.js"></script>
 
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css" media="screen">
 g {
   fill-opacity: .25;
@@ -36,9 +37,17 @@ text {
   fill-opacity: 1;
 }
 
-#fig {
-  height: 1000px;
-  width: 1200px;
+.techniques .panel-heading {
+  background-color: rgb(143,162,39);
+}
+.tools .panel-heading {
+  background-color: rgb(88,116,134);
+}
+.platforms .panel-heading {
+  background-color: rgb(220,111,29);
+}
+.languages .panel-heading {
+  background-color: rgb(183,0,98);
 }
 
 .techniques circle {
@@ -66,7 +75,7 @@ text {
 
 </head>
 
-<body onload="init(h,w);">
+<body onload="init(svg_height, svg_width);">
 <h1 id="title" style="text-align: center;"></h1>
 <div class="row">
   <div id="left" class="col-md-3"></div>

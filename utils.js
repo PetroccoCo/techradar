@@ -1,4 +1,3 @@
-
 function polar_to_cartesian(r,t) {  
   //radians to degrees, requires the t*pi/180
   var x = r * Math.cos((t*Math.PI/180));
@@ -6,15 +5,15 @@ function polar_to_cartesian(r,t) {
   return [x,y];
 }
 
-function cartesian_to_raster(x,y) {
-  var rx = w/2 + x;
-  var ry = h/2 - y;
+function cartesian_to_raster(x,y, height, width) {
+  var rx = width/2 + x;
+  var ry = height/2 - y;
   return [rx,ry];
 }
 
-function raster_to_cartesian(rx,ry) {
-  var x = rx - w/2;
-  var y = h/2 - ry;
+function raster_to_cartesian(rx,ry, height, width) {
+  var x = rx - width/2;
+  var y = height/2 - ry;
   return [x,y];
 }
 
@@ -24,12 +23,12 @@ function cartesian_to_polar(x,y) {
   return [r,t];
 }
 
-function polar_to_raster(r,t) {
+function polar_to_raster(r,t, height, width) {
   var xy= polar_to_cartesian(r,t);
-  return cartesian_to_raster(xy[0], xy[1]);
+  return cartesian_to_raster(xy[0], xy[1], height, width);
 }
 
-function raster_to_polar(rx, ry) {
-  var xy = raster_to_cartesian(rx, ry);
+function raster_to_polar(rx, ry, height, width) {
+  var xy = raster_to_cartesian(rx, ry, height, width);
   return cartesian_to_polar(xy[0], xy[1]);
 }

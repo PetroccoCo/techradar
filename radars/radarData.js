@@ -9,6 +9,12 @@ var radar_arcs = [
                    {'r':300,'name':'Assess'},
                    {'r':400,'name':'Hold'}
                  ];
+// take the largest ring's radius, multiply by two to get diameter
+// then add the smallest ring's radius as a buffer
+radar_arcs.sort(function (a,b){return a.r-b.r;});
+var largest_ring = radar_arcs[radar_arcs.length-1];
+svg_width = (largest_ring.r*2) + radar_arcs[0].r;
+svg_height = svg_width; // we have a circle here...
 
 //This is your raw data
 //
@@ -48,13 +54,11 @@ var radar_arcs = [
 // - Hold: things that are getting attention in the industry, but not ready for use; sometimes they are not mature enough yet, sometimes they are irredeemably flawed
 //      Note: there's no "avoid" ring, but throw things in the hold ring that people shouldn't use.
 
-var h = 1160;
-var w = 1200;
-
 var radar_data = [
-    { "quadrant": "Techniques", "color" : "#8FA227",
-        "left" : 45,
-        "top" : 18,
+    { "sector": "Techniques",
+      "color" : "#8FA227",
+      "degrees_min" : 90,
+      "degrees_max" : 180,
         "items" : [
             { "name": "DevOps",                                            "pc": { "r": 117, "t": 94},  "movement": "c"},
             { "name": "Real world testing of mobile networks",             "pc": { "r": 341, "t": 110}, "movement": "c"},
@@ -73,9 +77,10 @@ var radar_data = [
             { "name": "Infrastructure automation",                         "pc": { "r": 84,  "t": 175}, "movement": "c"}
         ]
     },
-    { "quadrant": "Tools", "color" : "#587486",
-        "left": w-200+30,
-        "top" : 18,
+    { "sector": "Tools",
+      "color" : "#587486",
+      "degrees_min" : 0,
+      "degrees_max" : 90,
         "items" : [
             { "name": "Gradle",                              "pc": { "r": 75,  "t": 4},  "movement": "c"},
             { "name": "Puppet",                              "pc": { "r": 265, "t": 5},  "movement": "c"},
@@ -102,9 +107,10 @@ var radar_data = [
             { "name": "WebFonts and SVG",                    "pc": { "r": 228, "t": 84}, "movement": "c"}
         ]
     },
-    { "quadrant": "Platforms", "color" : "#DC6F1D",
-        "left" :45,
-         "top" : (h/2 + 18),
+    { "sector": "Platforms",
+      "color" : "#DC6F1D",
+      "degrees_min" : 180,
+      "degrees_max" : 270,
         "items" : [
             { "name": "EC2 & S3",                                     "pc": { "r": 103, "t": 181}, "movement": "c"},
             { "name": "Google as corporate platform",                 "pc": { "r": 51,  "t": 194}, "movement": "c"},
@@ -127,9 +133,10 @@ var radar_data = [
             { "name": "OAuth",                                        "pc": { "r": 284, "t": 268}, "movement": "t"}
         ]
     },
-    { "quadrant": "Languages",        "color" : "#B70062",
-        "left"  : (w-200+30),
-        "top" :   (h/2 + 18),
+    { "sector": "Languages",
+      "color" : "#B70062",
+      "degrees_min" : 270,
+      "degrees_max" : 360,
         "items" : [
             { "name": "Ruby",                               "pc": { "r": 67,  "t": 272}, "movement": "c"},
             { "name": "Groovy",                             "pc": { "r": 317, "t": 273}, "movement": "c"},
