@@ -1,5 +1,8 @@
 /*jshint loopfunc:true */
 function init(svg_height,svg_width) {
+  //Setup inline edits of the descriptions
+  $.fn.editable.defaults.mode = 'inline';
+
   var radar = new pv.Panel()
   .width($("#radar").width())
   .height(Math.max($(window).height(), $("#radar").width()))
@@ -177,11 +180,24 @@ function addListItems() {
                 item.id + ': ' + item.name +
                 '</a></h4></div>'+
                 '<div id="collapse'+item.id+'" class="panel-collapse collapse">'+
-                '<div class="panel-body">'+item.desc+'</div></div></div>');
+                '<div class="panel-body">'+
+                '<a class="xeditable" href="#" id="desc-'+item.id+'" data-type="textarea" data-pk="'+i+'-'+j+'" data-title="'+item.name+'">'+item.desc+'</a></div></div></div>');
     }
     $("#"+className+"Accordion .collapse").collapse({parent: "#"+className+"Accordion", toggle: false});
+    $("a.xeditable").editable({
+      url: function(params) {
+        var d = new jQuery.Deferred();
+        var index = params.pk.split('-');
+        radar_data[index[0]].items[index[1]].desc = params.value;
+        d.resolve();
+        return d.promise();
+      },
+      rows: 10,
+      placeholder: "No description available."
+    });
   }
 }
+
 function exportJSON() {
   var json = JSON.stringify(
     radar_data,
