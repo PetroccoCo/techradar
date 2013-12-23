@@ -79,10 +79,36 @@ svg {
 </head>
 
 <body onload="init(svg_height, svg_width);">
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">New radar JSON</h4>
+      </div>
+      <div class="modal-body">
+        <p id="json"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="row">
   <div id="left" class="col-md-3"></div>
   <div id="radar" class="col-md-6"></div>
   <div id="right" class="col-md-3"></div>
 </div>
+
+<div style="position: fixed; bottom: 1em; right: 1em; ">
+    <button onclick="exportJSON();" type="button" class="btn btn-default btn-sm" title="Save">
+      <span class="glyphicon glyphicon-floppy-disk">&nbsp;</span> Save
+    </button>
+</div>
+
 </body>
 </html>

@@ -173,3 +173,8 @@ function addListItems() {
     }
   }
 }
+function exportJSON() {
+  var json = JSON.stringify(radar_data, ['sector', 'color', 'degrees_min', 'degrees_max', 'items', 'name', 'pc', 'r', 't', 'movement', 'blipSize'], '\t');
+  $("#json").text(json);
+  $('#myModal').modal();
+}
