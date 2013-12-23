@@ -139,6 +139,14 @@ function dragmove(d) {
   d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
 }
 
+function getSectionNameForPoint(point) {
+  for (var i = 0; i < radar_data.length; i++) {
+    if (point.pc.t >= radar_data[i].degrees_min && point.pc.t <= radar_data[i].degrees_max) {
+      return radar_data[i].sector;
+    }
+  }
+  throw "Could not find a section for point with theta: "+point.pc.t;
+}
 function addPointToSection(point) {
   for (var i = 0; i < radar_data.length; i++) {
     if (point.pc.t >= radar_data[i].degrees_min && point.pc.t <= radar_data[i].degrees_max) {
@@ -202,8 +210,24 @@ function exportJSON() {
   var json = JSON.stringify(
     radar_data,
     ['sector', 'color', 'degrees_min', 'degrees_max', 'items', 'name', 'desc', 'pc', 'r', 't', 'movement', 'blipSize'],
-    ' '
+    ''
   );
   $("#json").text(json);
-  $('#myModal').modal();
+  $("#download").click(function() {
+    var now = new Date().toString();
+    this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(json);
+  });
+  $('#saveModal').modal();
+}
+
+function openEditPointDialog(point) {
+  $("#thetaInput").slider({
+    min: 0, max:360,
+    change: function(e, u){ $("#thetaValue").text(u.value);}
+  });
+  $("#radInput").slider({
+    min: 0, max:400,
+    change: function(e, u){ $("#radValue").text(u.value);}
+  });
+  $('#editModal').modal();
 }
