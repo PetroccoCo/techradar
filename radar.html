@@ -67,6 +67,9 @@ text {
   stroke: rgb(183,0,98);
 }
 
+svg {
+  position: fixed;
+}
 </style>
 <script type="text/javascript" src="radar.js" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
@@ -76,7 +79,6 @@ text {
 </head>
 
 <body onload="init(svg_height, svg_width);">
-<h1 id="title" style="text-align: center;"></h1>
 <div class="row">
   <div id="left" class="col-md-3"></div>
   <div id="radar" class="col-md-6"></div>

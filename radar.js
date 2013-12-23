@@ -1,6 +1,5 @@
+/*jshint loopfunc:true */
 function init(svg_height,svg_width) {
-  $('#title').text(document.title);
-
   var radar = new pv.Panel()
   .width($("#radar").width())
   .height(Math.max($(window).height(), $("#radar").width()))
@@ -35,35 +34,11 @@ function init(svg_height,svg_width) {
   radar.anchor('radar');
   radar.render();
   var svg = d3.select("svg").attr("viewBox", "0 0 "+svg_height+" "+svg_width);
+  addLedgendHeaders();
   placePoints();
-  addLedgend();
+  addListItems();
 }
 
-function addOldLedgend() {
-  var radar_quadrant_ctr=1;
-  for (var i = 0; i < radar_data.length; i++) {
-    radar.add(pv.Label)
-    .left( radar_data[i].left )
-    .top( radar_data[i].top )
-    .text(  radar_data[i].sector )
-    .strokeStyle( radar_data[i].color )
-    .fillStyle( radar_data[i].color )
-    .font("18px sans-serif")
-    .add( pv.Dot )
-    .def("i", radar_data[i].top )
-    .data(radar_data[i].items)
-    .top( function() { return ( this.i() + 18 + this.index * 18 );} )
-    .shape( function(d) {return (d.movement === 't' ? "triangle" : "circle");})
-    .cursor( function(d) { return ( d.url !== undefined ? "pointer" : "auto" ); })
-    .event("click", function(d) { if ( d.url !== undefined ){self.location =  d.url;}})
-    .size(10)
-    .angle(45)
-    .anchor("right")
-    .add(pv.Label)
-    .text(function(d) {return radar_quadrant_ctr++ + ". " + d.name;} );
-  }
-
-}
 function placePoints() {
   var svg = d3.select("svg");
   var drag = d3.behavior.drag().
@@ -79,7 +54,7 @@ function placePoints() {
     d3.select("g." + className).remove();
 
     var group = svg.append("g").
-      attr("title", function(){ return radar_data[i].sector;}).
+      attr("title", radar_data[i].sector).
       attr("class", className);
 
     var node = group.selectAll(".node").
@@ -97,14 +72,13 @@ function placePoints() {
     });
 
     node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";}).
-      append("a").
       attr("title", function(d){return d.name;});
 
     //TODO shape(function(d) {return (d.movement === 't' ? "triangle" : "circle");})
     node.append("circle").attr("r", function (d) {return d.blipSize;}).
       attr("class", className);
 
-    node.attr("xlink:href", function(d){return "#"+d.id;}).
+    node.
       attr("class", function(d){return "node cir_"+d.id;}).
       append("text").
       attr("dy", ".35em").
@@ -124,6 +98,14 @@ function radarDataSorter(a, b){
 
 function dropHandler(d) {
   var polar = raster_to_polar(d.x, d.y, svg_height, svg_width);
+  if (polar[0] === d.pc.r && polar[1] === d.pc.t) {
+    //no change show click handler
+    $(".alert").removeClass("alert alert-danger");
+    var item = $("#legend-"+d.id).addClass("alert alert-danger");
+    console.log(item);
+    window.location.hash = "#legend-"+d.id;
+    return;
+  }
   d.pc.r = polar[0];
   d.pc.t = polar[1];
   var pointLocation = findPoint(d.name);
@@ -132,7 +114,7 @@ function dropHandler(d) {
     addPointToSection(pointToMove);
   }
   placePoints();
-  addLedgend();
+  addListItems();
 }
 
 function findPoint(name) {
@@ -162,28 +144,32 @@ function addPointToSection(point) {
   throw "Could not find a section for point with theta: "+point.pc.t;
 }
 
-function addLedgend() {
+function addLedgendHeaders() {
+  $(".panel-default").remove();
+  for ( var i = 0; i < radar_data.length; i++) {
+    var sector = radar_data[i];
+    var className = sector.sector.toLowerCase();
+    var panelDiv = $(document.createElement('div')).attr("id", className+"Ledgend").addClass("panel panel-default "+className);
+    if (i%2===0) {
+      panelDiv.appendTo($("#left"));
+    } else {
+      panelDiv.appendTo($("#right"));
+    }
+    panelDiv.append('<div class="panel-heading"><h3 class="panel-title">'+sector.sector+'</h3></div>');
+    panelDiv.append('<ul class="list-group">');
+  }
+}
+
+function addListItems() {
   for ( var i = 0; i < radar_data.length; i++) {
     var sector = radar_data[i];
     var className = sector.sector.toLowerCase();
     var panelDiv = $("#"+className+"Ledgend");
-    var panelHtml;
-    if(panelDiv.length == 0) {
-      panelDiv = $(document.createElement('div')).attr("id", className+"Ledgend").addClass("panel panel-default "+className);
-      if (i < 2) {
-        panelDiv.appendTo($("#left"));
-      } else {
-        panelDiv.appendTo($("#right"));
-      }
-      panelDiv.append('<div class="panel-heading"><h3 class="panel-title">'+sector.sector+'</h3></div>');
-    } else {
-      panelDiv.children("ul").remove();
-    }
-    panelDiv.append('<ul class="list-group">');
     var ul = panelDiv.children("ul");
+    ul.children("li").remove();
     for (var j = 0; j < sector.items.length; j++) {
       var item = sector.items[j];
-      ul.append('<li class="list-group-item">' + item.id + ': ' + item.name + '</li>');
+      ul.append('<li class="list-group-item"><div id="legend-' + item.id + '"><a name="legend-' + item.id + '">' + item.id + ': ' + item.name + '</a></div></li>');
     }
   }
 }

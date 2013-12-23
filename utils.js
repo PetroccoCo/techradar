@@ -20,6 +20,7 @@ function raster_to_cartesian(rx,ry, height, width) {
 function cartesian_to_polar(x,y) {
   var r = Math.round(Math.sqrt(x*x + y*y));
   var t = Math.round(Math.atan2(y, x) * 180/Math.PI);
+  t = (t>=0 ? t : 360+t);
   return [r,t];
 }
 
