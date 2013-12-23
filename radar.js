@@ -100,10 +100,12 @@ function dropHandler(d) {
   var polar = raster_to_polar(d.x, d.y, svg_height, svg_width);
   if (polar[0] === d.pc.r && polar[1] === d.pc.t) {
     //no change show click handler
-    $(".alert").removeClass("alert alert-danger");
-    var item = $("#legend-"+d.id).addClass("alert alert-danger");
-    console.log(item);
-    window.location.hash = "#legend-"+d.id;
+    $("#collapse"+d.id).
+      collapse("show").
+      on('shown.bs.collapse', function () {
+        window.location.hash = "#legend-"+d.id;
+        $(this).off("shown.bs.collapse");
+    });
     return;
   }
   d.pc.r = polar[0];
@@ -149,14 +151,14 @@ function addLedgendHeaders() {
   for ( var i = 0; i < radar_data.length; i++) {
     var sector = radar_data[i];
     var className = sector.sector.toLowerCase();
-    var panelDiv = $(document.createElement('div')).attr("id", className+"Ledgend").addClass("panel panel-default "+className);
+    var panelDiv = $(document.createElement('div')).attr("id", className+"Ledgend").addClass("well well-sm "+className);
     if (i%2===0) {
       panelDiv.appendTo($("#left"));
     } else {
       panelDiv.appendTo($("#right"));
     }
-    panelDiv.append('<div class="panel-heading"><h3 class="panel-title">'+sector.sector+'</h3></div>');
-    panelDiv.append('<ul class="list-group">');
+    panelDiv.append('<h3>'+sector.sector+'</h3>');
+    panelDiv.append('<div class="panel-group" id="' + className + 'Accordion">');
   }
 }
 
@@ -165,16 +167,27 @@ function addListItems() {
     var sector = radar_data[i];
     var className = sector.sector.toLowerCase();
     var panelDiv = $("#"+className+"Ledgend");
-    var ul = panelDiv.children("ul");
-    ul.children("li").remove();
+    var accordion = panelDiv.children("div.panel-group");
+    accordion.children("div.panel").remove();
     for (var j = 0; j < sector.items.length; j++) {
       var item = sector.items[j];
-      ul.append('<li class="list-group-item"><div id="legend-' + item.id + '"><a name="legend-' + item.id + '">' + item.id + ': ' + item.name + '</a></div></li>');
+      item.desc = (item.desc === undefined ? "No description available" : item.desc);
+      accordion.append('<div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title">'+
+                '<a name="legend-'+item.id+'" data-toggle="collapse" data-parent="#'+className+'Accordion" href="#collapse'+item.id+'">'+
+                item.id + ': ' + item.name +
+                '</a></h4></div>'+
+                '<div id="collapse'+item.id+'" class="panel-collapse collapse">'+
+                '<div class="panel-body">'+item.desc+'</div></div></div>');
     }
+    $("#"+className+"Accordion .collapse").collapse({parent: "#"+className+"Accordion", toggle: false});
   }
 }
 function exportJSON() {
-  var json = JSON.stringify(radar_data, ['sector', 'color', 'degrees_min', 'degrees_max', 'items', 'name', 'pc', 'r', 't', 'movement', 'blipSize'], '\t');
+  var json = JSON.stringify(
+    radar_data,
+    ['sector', 'color', 'degrees_min', 'degrees_max', 'items', 'name', 'desc', 'pc', 'r', 't', 'movement', 'blipSize'],
+    ' '
+  );
   $("#json").text(json);
   $('#myModal').modal();
 }

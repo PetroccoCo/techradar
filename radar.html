@@ -70,6 +70,10 @@ text {
 svg {
   position: fixed;
 }
+
+body .modal-dialog {
+  width: 90vw;
+}
 </style>
 <script type="text/javascript" src="radar.js" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
@@ -89,7 +93,7 @@ svg {
         <h4 class="modal-title" id="myModalLabel">New radar JSON</h4>
       </div>
       <div class="modal-body">
-        <p id="json"></p>
+        <pre id="json"></pre>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
